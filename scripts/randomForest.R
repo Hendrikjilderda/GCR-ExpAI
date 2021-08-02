@@ -1,5 +1,5 @@
 rf_model <-
-  rand_forest(mtry = tune(), trees = 1000, min_n = tune()) %>%
+  rand_forest(mtry = tune(), trees = 500, min_n = tune()) %>%
   set_engine("randomForest") %>%
   set_mode("classification")
 
@@ -9,7 +9,7 @@ rf_workflow <-
   add_model(rf_model)
 
 set.seed(234)
-folds <- vfold_cv(GCR_train, v = 3, repeats = 1)
+folds <- vfold_cv(GCR_train, v = 5, repeats = 5)
 grid <- expand.grid(mtry = 3, min_n = 7)    # 3 7 beste accuracy
 
 doParallel::registerDoParallel()
@@ -42,7 +42,7 @@ final_rf
 final_rf %>%
   set_engine('randomForest') %>%
   fit(Risk ~ ., data = GCR_juice  ) %>%
-  vip(geom= 'point')
+  vip::vip(geom= 'point')
 
 final_wf <- workflow() %>%
   add_recipe(GCR_recipe) %>%
