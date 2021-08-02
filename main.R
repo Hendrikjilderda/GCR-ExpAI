@@ -7,3 +7,5 @@ source("scripts/load_packages.R")
 #data setup
 source("scripts/load_dataset.R")
 source("scripts/recipes.R")
+
+source("scripts/randomForest.R")
