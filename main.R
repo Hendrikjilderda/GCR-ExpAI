@@ -8,4 +8,7 @@ source("scripts/load_packages.R")
 source("scripts/load_dataset.R")
 source("scripts/recipes.R")
 
+
+source("scripts/xgboost.R")
+
 source("scripts/randomForest.R")

@@ -10,7 +10,7 @@ rf_workflow <-
 
 set.seed(234)
 folds <- vfold_cv(GCR_train, v = 5, repeats = 5)
-grid <- expand.grid(mtry = 3, min_n = 7)    # 3 7 beste accuracy
+grid <- expand.grid(mtry = 1:9 , min_n = 1:7)    # 3 7 beste accuracy
 
 doParallel::registerDoParallel()
 tuned_rf <- tune_grid(rf_workflow, 
