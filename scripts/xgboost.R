@@ -1,13 +1,4 @@
 
-
-GCR_cv_folds <- 
-  recipes::bake(
-    GCR_prep, 
-    new_data = training(GCR_split)
-  ) %>%  
-  rsample::vfold_cv(v = 5)
-
-
 xgboost_model <- 
   boost_tree(
     mtry = tune(),
@@ -25,8 +16,8 @@ xg_workflow <-
 
 
 ctrl <- control_resamples(save_pred = TRUE)
-folds <- vfold_cv(GCR_train, v = 2, repeats = 3)
-grid <-  expand.grid(mtry = 1:11, min_n = 1:11)
+folds <- vfold_cv(GCR_train, v = 5)
+grid <-  expand.grid(mtry = 1, min_n = 1)
 
 
 
