@@ -1,8 +1,7 @@
 GCR_recipe <- recipe(Risk ~ ., data = GCR_train) %>%
-  step_impute_knn(all.nominal(), k = 5)
+  step_impute_knn(Saving.accounts,  Checking.account, k = 5) %>%
     
   step_rm(X) %>%
-  step_rm(Age) %>%
   step_other(Purpose, threshold = 0.10) %>% # is dit wel nodig? van 8 naar 4
 
 
@@ -21,7 +20,6 @@ step_mutate(
   
 
 #nieuwe variabele maken met credit per maand?
-
 
 
 GCR_prep <- prep(GCR_recipe)
