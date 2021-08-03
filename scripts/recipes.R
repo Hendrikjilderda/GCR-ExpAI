@@ -1,23 +1,25 @@
 GCR_recipe <- recipe(Risk ~ ., data = GCR_train) %>%
+  step_impute_knn(all.nominal(), k = 5)
+    
   step_rm(X) %>%
-#   step_other(Purpose, threshold = 0.10) %>% # is dit wel nodig? van 8 naar 4
-# 
-# 
-# step_mutate(
-#   Credit.amount = ifelse(Credit.amount > 4000, 'high',
-#                          ifelse(Credit.amount > 2000, 'medium', 'low')),
-#  
-#   Duration = ifelse(Duration > 25, 'long', 
-#                     ifelse(Duration > 15, 'medium','short')),
-#   
-#   Age = ifelse(Age > 45, 'old',
-#                ifelse(Age > 30, 'midlife', 'young'))
-# ) %>%
+  step_rm(Age) %>%
+  step_other(Purpose, threshold = 0.10) %>% # is dit wel nodig? van 8 naar 4
+
+
+step_mutate(
+  Credit.amount = ifelse(Credit.amount > 4000, 'high',
+                         ifelse(Credit.amount > 2000, 'medium', 'low')),
+
+  Duration = ifelse(Duration > 25, 'long',
+                    ifelse(Duration > 15, 'medium','short'))
+) %>%
+  step_string2factor(all_nominal()) %>%
+
+  step_dummy(all_nominal(), -Risk) 
 
   # step_normalize(Age) %>%
   
-  step_string2factor(all_nominal())
-  
+
 #nieuwe variabele maken met credit per maand?
 
 

@@ -1,6 +1,5 @@
 GCR <- read.csv('./data/german_credit_data.csv',
-                header = TRUE) %>%
-        na.omit(CGR)
+                header = TRUE)
 
 set.seed(123)
 GCR_split <- initial_split(GCR, strata = Risk)
