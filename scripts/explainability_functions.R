@@ -1,44 +1,73 @@
-# function for making tidymodel explainer. 
-# In the return statement you can change parameters if needed.
+# in custom predict geprutst met welke object er gebruikt moet worden.
+# origineel:
 
-tm_explainer <- function(fitted_model, 
-                         dataset = NULL, 
-                         target_var = NULL, 
-                         label = NULL) {
-  
-  if(is.null(dataset)){
-    warning('dataset not needed but recommended\n')
-  }
-  
-  if(is.null(target_var)){
-    warning('target variable not needed but recommended\n')
-  }
-  
-  if(is.null(label)){
-    warning('label not needed but highly recommended for plots')
-  }
-  
-  return(
-    explain_tidymodels(
-      model = fitted_model,
-      data = dataset,
-      y = as.numeric(target_var),
-      label = label,
-      
-      #defaults 
-      weights = NULL,
-      predict_function = NULL,
-      residual_function = NULL,
-      
-      
-      verbose = TRUE,
-      precalculate = TRUE,
-      colorize = TRUE,
-      model_info = NULL,
-      type = NULL
-    )
-  )
+# custom_predict <- function(object, newdata, positive_value) { 
+# pred <- predict(object, newdata, type = 'prob')
+# response <- as.vector(pred$.pred_pos)
+# return(response)}
+
+
+custom_predict <- function(object, newdata) { 
+  print('here')
+  object %>% fit(data = newdata, formula = NULL)
+  pred <- predict(object, newdata, type = 'prob') #problem
+  print('here')
+  response <- as.vector(pred$.pred_pos)
+  return(response)
 }
+
+
+tm_explainer <- function(workflow, dataset, target_variable, label = NULL){
+  .GlobalEnv$data <-
+    as.data.frame(
+      prep(workflow$pre$actions$recipe$recipe, dataset) %>%
+        bake(dataset) %>%
+        select(-target_variable)
+      )
+  
+  head(data)
+  
+  #model uit de workflow gehaald
+  .GlobalEnv$model <- workflow$fit$actions$model$spec
+  
+  
+  fitted_wf <-
+    workflow %>%
+    fit(dataset)
+  
+  return_explainer <- explain_tidymodels(
+    model = fitted_wf,
+    data = data,
+    y = as.numeric(as.factor(dataset[, target_variable])) , #problem
+    label = label,
+    
+    #defaults kan worden aangepast
+    weights = NULL,
+    
+    #hier custom predict neergezet. default = NULL -> geeft error
+    predict_function = custom_predict(model, dataset), 
+    residual_function = NULL,
+    
+    verbose = TRUE,
+    precalculate = TRUE,
+    colorize = TRUE,
+    model_info = NULL,
+    type = NULL
+  )
+
+  return(return_explainer)
+}
+
+
+
+
+
+
+
+#ideetjes:
+# * 
+
+
 
 ################################################################################
 
