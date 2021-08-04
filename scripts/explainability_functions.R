@@ -87,6 +87,8 @@ SHAP <- function(case, explainer) {
   #plot shap values, show_boxplots = FALSE ook mogelijk
   plot(SHAP_val) +
     ggtitle("Shapley Additive Explainations", "")
+  
+  return(SHAP_val)
 }
 
 
@@ -107,6 +109,8 @@ CP <- function(case, variables, explainer) {
   #plot Ceteris paribus profile
   plot(CP_val, variables = variables) +
     ggtitle("Ceteris-paribus profile", "") + ylim(0, 0.8)
+  
+  return(CP_val)
 }
 
 
@@ -128,6 +132,8 @@ VIP <- function(explainer) {
   
   plot(SHAP_val) +
     ggtitle("Variable Importance Measures", "")
+  
+  return(VIP_Val)
 }
 
 ########################
@@ -144,7 +150,9 @@ calc_PDP <- function(variables, explainer) {
 PDP <- function(variable, explainer) {
   return_PDP <- calc_PDP(variable, explainer)
   
-  plot(pdp_rf) +  ggtitle(sprintf("Partial-dependence profile for %s", variable)) 
+  plot(pdp_rf) +  ggtitle(sprintf("Partial-dependence profile for %s", variable))
+  
+  return(PDP_val)
 }
 
 
