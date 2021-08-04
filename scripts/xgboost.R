@@ -2,7 +2,7 @@
 xgboost_model <- 
   boost_tree(
     mtry = tune(),
-    trees = 1000,
+    trees = 500,
     min_n = tune(),
   ) %>%
   set_engine("xgboost") %>%
@@ -17,7 +17,7 @@ xg_workflow <-
 
 ctrl <- control_resamples(save_pred = TRUE)
 folds <- vfold_cv(GCR_train, v = 5)
-grid <-  expand.grid(mtry = 1, min_n = 1)
+grid <-  expand.grid(mtry = 5:16 , min_n = 1:8)
 
 
 
@@ -37,3 +37,5 @@ xgboost_best_params <- tuned_xg %>%
 
 xgboost_model_final <- xgboost_model %>% 
   finalize_model(xgboost_best_params)
+
+# mtry 6 , min n 4

@@ -14,4 +14,5 @@ source("scripts/load_dataset.R")
 source("scripts/recipes.R")
 
 source("scripts/randomForest.R")
-
+source("scripts/xgboost.R")
+source("scripts/svm.R")
