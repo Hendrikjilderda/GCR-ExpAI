@@ -1,81 +1,32 @@
-# function for making tidymodel explainer. 
-# In the return statement you can change parameters if needed.
+#fitting workflows
+fitted_rf <-
+  final_rf_wf %>%
+  fit(GCR_test)
 
-tm_explainer <- function(fitted_model, 
-                         dataset = NULL, 
-                         target_var = NULL, 
-                         label = NULL) {
+fitted_xg <-
+  final_xg_wf %>%
+  fit(GCR_test)
   
-  if(is.null(dataset)){
-    warning('dataset not needed but recommended\n')
-  }
-  
-  if(is.null(target_var)){
-    warning('target variable not needed but recommended\n')
-  }
-  
-  if(is.null(label)){
-    warning('label not needed but highly recommended for plots')
-  }
-  
-  return(
-    explain_tidymodels(
-      model = fitted_model,
-      data = dataset,
-      y = as.numeric(target_var),
-      label = label,
-      
-      #defaults 
-      weights = NULL,
-      predict_function = NULL,
-      residual_function = NULL,
-      
-      
-      verbose = TRUE,
-      precalculate = TRUE,
-      colorize = TRUE,
-      model_info = NULL,
-      type = NULL
-    )
-  )
-}
+fitted_svm <-
+  final_svm_wf %>%
+  fit(GCR_test)
 
-################################################################################
 
-# function for updating explainer.
-# possible to update data, label or both.
+#rf explainer
+tm_explainer(final_rf, 
+             dataset = GCR_test, 
+             target_var = GCR_test$Risk,
+             label = 'Random Forest')
 
-update__tm_explainer <- function(explainer, 
-                                 new_dataset = NULL, 
-                                 new_target_var = NULL, 
-                                 new_label = NULL ){
-  
-  if(!is.null(new_dataset) && is.null(new_label)){
-    if(is.null(new_target_var)){
-      warning('target variable not needed but recommended\n')
-    }
-    
-    new_explainer <- update_data(explainer, 
-                                 new_dataset, 
-                                 new_target_var, 
-                                 verbose = TRUE)
-    return(new_explainer)
-    
-  }
-  else if(is.null(new_dataset) && !is.null(new_label)){
-    new_explainer <- update_label(explainer, 
-                                  new_label, 
-                                  verbose = TRUE)
-    return(new_explainer)
-  }
-  else{
-    new_data_explainer <- update_data(explainer, 
-                                      new_dataset, 
-                                      new_target_var, 
-                                      verbose = TRUE)
-    new_explainer <-update_label(explainer, 
-                                 new_label, 
-                                 verbose = TRUE)
-    return(new_explainer)
-  }
-}
+#xg explainer
+tm_explainer(final_xg,
+             dataset = GCR_test,
+             target_var = GCR_test$Risk,
+             label = 'XG boost')
+
+#svm explainer
+tm_explainer(final_svm,
+             dataset = GCR_test,
+             target_var = GCR_test$Risk,
+             label = 'Support Vector Machine')
+

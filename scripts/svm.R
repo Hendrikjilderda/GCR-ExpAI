@@ -1,8 +1,5 @@
-svm_model <- svm_poly(
-  mtry = tune()
-  trees = 500,
-  min_n = tune()
-) %>%
+svm_model <- 
+  svm_poly() %>%
   set_engine("kernlab") %>%
   set_mode("classification")
 
@@ -27,9 +24,22 @@ svm_best_params <-
   tuned_svm %>%
   tune::select_best('accuracy')
 
-svm_model_final <- 
+final_svm <- 
   svm_model %>%
   finalize_model(svm_best_params)
   
+final_svm
 
+final_svm_wf <-
+  workflow() %>%
+  add_recipe(GCR_recipe) %>%
+  add_model(final_Svm)
+
+final_svm_res <- 
+  final_svm_wf %>%
+  last_fit(GCR_split)
+
+final_svm_res %>%
+  collect_metrics()
+  
 

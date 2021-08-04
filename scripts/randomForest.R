@@ -44,12 +44,12 @@ final_rf %>%
   fit(Risk ~ ., data = GCR_juice  ) %>%
   vip::vip(geom= 'point')
 
-final_wf <- workflow() %>%
+final_rf_wf <- workflow() %>%
   add_recipe(GCR_recipe) %>%
   add_model(final_rf)
 
-final_res <- final_wf %>%
+final_rf_res <- final_rf_wf %>%
   last_fit(GCR_split)
 
-final_res %>%
+final_rf_res %>%
   collect_metrics()

@@ -5,7 +5,6 @@ setwd("C:/Users/Hendrik/Documents/Programming/R/GCR-ExpAI")
 source("scripts/load_packages.R")
 
 #preloading explainability functions
-source('scripts/explainer.R')
 source("scripts/explainability_functions.R")
 
 
@@ -13,6 +12,18 @@ source("scripts/explainability_functions.R")
 source("scripts/load_dataset.R")
 source("scripts/recipes.R")
 
+
+#running different models
 source("scripts/randomForest.R")
+final_rf
+
 source("scripts/xgboost.R")
+final_xg
+
 source("scripts/svm.R")
+final_svm
+
+#explainers setup
+source('scripts/explainer.R')
+
+

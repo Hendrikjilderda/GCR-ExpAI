@@ -35,7 +35,19 @@ xgboost_best_params <- tuned_xg %>%
   tune::select_best("accuracy")
 
 
-xgboost_model_final <- xgboost_model %>% 
+final_xg <- xgboost_model %>% 
   finalize_model(xgboost_best_params)
+
+final_xg_wf <- 
+  workflow() %>%
+  add_recipe(GCR_recipe) %>%
+  add_model(final_Xg)
+
+final_xg_res <- final_xg_wf %>%
+  last_fit(GCR_split)
+
+final_xg_res %>%
+  collect_metrics()
+
 
 # mtry 6 , min n 4
