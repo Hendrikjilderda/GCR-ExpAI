@@ -33,7 +33,7 @@ final_svm
 final_svm_wf <-
   workflow() %>%
   add_recipe(GCR_recipe) %>%
-  add_model(final_Svm)
+  add_model(final_svm)
 
 final_svm_res <- 
   final_svm_wf %>%

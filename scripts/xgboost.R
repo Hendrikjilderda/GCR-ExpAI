@@ -41,7 +41,7 @@ final_xg <- xgboost_model %>%
 final_xg_wf <- 
   workflow() %>%
   add_recipe(GCR_recipe) %>%
-  add_model(final_Xg)
+  add_model(final_xg)
 
 final_xg_res <- final_xg_wf %>%
   last_fit(GCR_split)
