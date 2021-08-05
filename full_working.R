@@ -17,7 +17,7 @@ GCR_recipe <- recipe(Risk ~ ., data = GCR_train) %>%
   step_other(Purpose, threshold = 0.10, other = 'other_value')# is dit wel nodig? van 8 naar 4
 
 rf_model <-
-  rand_forest(mtry = 8, trees = 500, min_n = 5) %>%
+  rand_forest(mtry = 5, trees = 500, min_n = 8) %>%
   set_engine("randomForest") %>%
   set_mode("classification")
 
