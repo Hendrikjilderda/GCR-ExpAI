@@ -31,7 +31,7 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   #amount of functions
   function_amount <- 4
 
-  .GlobalEnv$explainer <- gen_explainer(model_fitted, train, target_variable, label = NULL)
+  .GlobalEnv$explainer <- gen_explainer(model_fitted, train, target_variable, label)
   
   list <- vector(mode = "list", length = function_amount)
   plot_list <- vector(mode = "list", length = 0)
@@ -43,8 +43,6 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   if(exists('case')){
     .GlobalEnv$plot_SHAP <- SHAP(case, explainer)
     list <- c(list, 1)
-    plot(plot_SHAP)
-    
   } else {
     warning('case not specified')
   }
@@ -54,7 +52,6 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   
   if (exists('variables') && exists('case')){
     plot_CP <- CP(case, variables, explainer)
-    plot(plot_CP)
     list <- c(list, 2)
   } else{
     warning('variables or/and case not specified')
@@ -66,7 +63,6 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   
   .GlobalEnv$plot_VIP <- VIP(explainer)
   list <- c(list, 3)
-  
   print('VIP made')######
   
 #  .GlobalEnv$plot_PDP <- PDP(var, explainer)  #FIXME
@@ -74,48 +70,45 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
 
 #  print('PDP made')
   
-## switch statement werkt nog niet goed!!!!  
-  
 #combining plots into one plot
 ################################################################################
-  for(plot in list){
-    switch (plot,
-      {
-        if(!exists('plot_list')) {
-          plot_list <- vector(mode = "list", length = 1)
-          plot_list[1] <- plot_SHAP
-        } else{
-          plot_list <- c(plot_list, plot_SHAP)
-        }
-      },
-      
-      {
-        if(!exists('plot_list')) {
-          plot_list <- vector(mode = "list", length = 1)
-          plot_list[1] <- plot_CP
-        } else{
-          plot_list <- c(plot_list, plot_CP)
-
-        }
-      },
-      
-      {
-        if(!exists('plot_list')) {
-          plot_list <- vector(mode = "list", length = 1)
-          plot_list[1] <- plot_VIP
-        } else{
-          plot_list <- c(plot_list, plot_VIP)
-          plot(plot_VIP)
-        }
-      },
-      
-      {
-        plot_list <- c(plot_list, plot_PDP)
-        plot(plot_PDP)
+  
+  for (plot in list) {
+    if (plot == 1){
+      if(!exists('plot_list')) {
+        plot_list <- vector(mode = "list", length = 1)
+        plot_list[1] <- plot_SHAP
+        plot(plot_SHAP)
+      } else{
+        plot_list <- c(plot_list, plot_SHAP)
+        plot(plot_SHAP)
       }
-    )
+    } 
+    else if (plot == 2){
+      if(!exists('plot_list')) {
+        plot_list <- vector(mode = "list", length = 1)
+        plot_list[1] <- plot_CP
+        plot(plot_CP)
+      } else{
+        plot_list <- c(plot_list, plot_CP)
+        plot(plot_CP)
+      }
+    }
+    else if (plot == 3){
+      if(!exists('plot_list')) {
+        plot_list <- vector(mode = "list", length = 1)
+        plot_list[1] <- plot_VIP
+      } else{
+        plot_list <- c(plot_list, plot_VIP)
+        plot(plot_VIP)
+      }
+    }
+    else if (plot == 4){
+      plot_list <- c(plot_list, plot_PDP)
+      plot(plot_PDP)
+    }
   }
   
-  #zou in theorie moeten werken?!
+  #zou in theorie moeten werken?! werkt niet...
   gridExtra::grid.arrange(plot_list)
 }
