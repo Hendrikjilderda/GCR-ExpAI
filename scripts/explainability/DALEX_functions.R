@@ -81,7 +81,7 @@ VIP <- function(explainer) {
 # Partial Dependence Profiles 
 # (https://ema.drwhy.ai/partialDependenceProfiles.html)
 
-calc_PDP <- function(variables, explainer) {
+calc_PDP <- function(variable, explainer) {
   PDP_val <- DALEX::model_profile(explainer = explainer,
                                   variables = variable)
   

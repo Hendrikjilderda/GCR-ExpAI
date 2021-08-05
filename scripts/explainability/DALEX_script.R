@@ -43,6 +43,7 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   if(exists('case')){
     .GlobalEnv$plot_SHAP <- SHAP(case, explainer)
     list <- c(list, 1)
+    plot(plot_SHAP)
     
   } else {
     warning('case not specified')
@@ -53,8 +54,7 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   
   if (exists('variables') && exists('case')){
     plot_CP <- CP(case, variables, explainer)
-    
-    print('here')
+    plot(plot_CP)
     list <- c(list, 2)
   } else{
     warning('variables or/and case not specified')
@@ -69,10 +69,13 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   
   print('VIP made')######
   
-  .GlobalEnv$plot_PDP <- PDP(var, explainer)
-  list <- c(list, 4)
+#  .GlobalEnv$plot_PDP <- PDP(var, explainer)  #FIXME
+#  list <- c(list, 4)
 
-  print('PDP made')
+#  print('PDP made')
+  
+## switch statement werkt nog niet goed!!!!  
+  
 #combining plots into one plot
 ################################################################################
   for(plot in list){
@@ -92,6 +95,7 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
           plot_list[1] <- plot_CP
         } else{
           plot_list <- c(plot_list, plot_CP)
+
         }
       },
       
@@ -101,16 +105,17 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
           plot_list[1] <- plot_VIP
         } else{
           plot_list <- c(plot_list, plot_VIP)
+          plot(plot_VIP)
         }
       },
       
       {
         plot_list <- c(plot_list, plot_PDP)
+        plot(plot_PDP)
       }
     )
   }
   
   #zou in theorie moeten werken?!
   gridExtra::grid.arrange(plot_list)
-
 }
