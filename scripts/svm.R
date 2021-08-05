@@ -35,11 +35,10 @@ final_svm_wf <-
   add_recipe(GCR_recipe) %>%
   add_model(final_svm)
 
-final_svm_res <- 
-  final_svm_wf %>%
-  last_fit(GCR_split)
+final_svm_fitted <- final_svm_wf %>% 
+  fit(data = GCR_train)
 
-final_svm_res %>%
-  collect_metrics()
+final_svm_fitted %>%
+  predict(new_data = GCR_test)
   
 

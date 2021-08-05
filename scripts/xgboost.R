@@ -43,11 +43,13 @@ final_xg_wf <-
   add_recipe(GCR_recipe) %>%
   add_model(final_xg)
 
-final_xg_res <- final_xg_wf %>%
-  last_fit(GCR_split)
+final_xg_fitted <- final_xg_wf %>%
+  fit(data = GCR_train)
 
-final_xg_res %>%
-  collect_metrics()
+
+final_xg_fitted %>%
+  predict(new_data = GCR_test)
+
 
 
 # mtry 6 , min n 4

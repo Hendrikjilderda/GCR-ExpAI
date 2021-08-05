@@ -10,7 +10,7 @@ rf_workflow <-
 
 set.seed(234)
 folds <- vfold_cv(GCR_train, v = 5, repeats = 5)
-grid <- expand.grid(mtry = 5:16 , min_n = 1:8 )    # 3 7 beste accuracy
+grid <- expand.grid(mtry = 8 , min_n = 5 )    # 8 5 beste accuracy
 
 doParallel::registerDoParallel()
 tuned_rf <- tune_grid(rf_workflow, 
@@ -23,12 +23,7 @@ tuned_rf %>%
   select(mean, min_n, mtry) %>%
   pivot_longer(min_n:mtry,
                values_to = "value",
-               names_to = "parameter") %>%
-  
-  ggplot(aes(value, mean, color = parameter)) +
-  geom_point(show.legend = FALSE) +
-  facet_wrap(~parameter, scales = "free_x") +
-  labs(x = NULL, y = "Accuracy")
+               names_to = "parameter")
 
 best_params <- tuned_rf %>%
   tune::select_best(metric = "accuracy")
@@ -39,17 +34,13 @@ final_rf <- finalize_model(
 
 final_rf
 
-final_rf %>%
-  set_engine('randomForest') %>%
-  fit(Risk ~ ., data = GCR_juice  ) %>%
-  vip::vip(geom= 'point')
-
 final_rf_wf <- workflow() %>%
   add_recipe(GCR_recipe) %>%
   add_model(final_rf)
 
-final_rf_res <- final_rf_wf %>%
-  last_fit(GCR_split)
+final_rf_fitted <- final_rf_wf %>% 
+  fit(data = GCR_train)
 
-final_rf_res %>%
-  collect_metrics()
+final_rf_fitted %>%
+  predict(new_data = GCR_test)
+
