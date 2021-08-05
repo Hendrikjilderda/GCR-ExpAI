@@ -3,9 +3,9 @@
 ##  Script voor explainability functions. De volgende variabelen moeten       ##
 ##  declared zijn:                                                            ##
 ##                                                                            ##
-##  * model_fitted                                                            ##
-##  * dataset                                                                 ##
-##  * target_variable                                                         ##
+##  * DALEX_model_fitted                                                            ##
+##  * DALEX_train                                                                 ##
+##  * DALEX_target_variable                                                         ##
 ##  * case (benodigd voor instance level explainations)                       ##
 ##  * variables (benodigd voor Ceteris-Paribus profiles)                      ##
 ##                                                                            ##
@@ -17,8 +17,8 @@
 ################################################################################
 
 
-if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
-  stop('not able to make explainer because of missing variables')
+if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_target_variable')){
+  stop('[debug]not able to make explainer because of missing variables')
   
 } else {
   
@@ -31,7 +31,7 @@ if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   #amount of functions
   function_amount <- 4
 
-  .GlobalEnv$explainer <- gen_explainer(model_fitted, train, target_variable, label)
+  .GlobalEnv$explainer <- gen_explainer(DALEX_model_fitted, DALEX_train, DALEX_target_variable, label)
   
   list <- vector(mode = "list", length = function_amount)
   plot_list <- vector(mode = "list", length = 0)

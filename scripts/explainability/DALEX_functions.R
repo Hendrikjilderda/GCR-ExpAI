@@ -131,6 +131,14 @@ gen_explainer <- function(model_fitted, train, target_variable, label=NULL){
   return(generated_explainer)
 }
 
+################################################################################
+make_vars <- function(model_fitted, data, target_variable, label = NULL){
+  DALEX_model_fitted <- model_fitted
+  DALEX_train <- data
+  DALEX_target_variable
+  label <- label
+}
+
 
 
 

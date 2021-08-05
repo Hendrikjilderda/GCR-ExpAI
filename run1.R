@@ -29,4 +29,3 @@ model_fitted <- rf_workflow %>%
 
 model_fitted %>%
   predict(new_data = GCR_test)
-
