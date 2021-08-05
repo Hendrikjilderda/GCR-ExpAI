@@ -50,8 +50,8 @@ De volgende functies zijn beschikbaar:\n
 *titel van command is tevens een hyperlink naar verder uitleg.*
 
 - tm_explainer
-        tm_explainer(<workflow>, <dataset>, <target_variable>, <label>)
-workflow -> workflow van het definitieve model
+        tm_explainer(<fitted_model>, <dataset>, <target_variable>, <label>)
+fitted_model -> fitted en predicted workflow 
 dataset ->  dataset waarop het model gebaseerd is?
 target_variable ->  doel variabele
 label (optineel) -> naam voor het model die terug komt in de plots

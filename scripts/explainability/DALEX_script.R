@@ -3,7 +3,7 @@
 ##  Script voor explainability functions. De volgende variabelen moeten       ##
 ##  declared zijn:                                                            ##
 ##                                                                            ##
-##  * workflow                                                                ##
+##  * model_fitted                                                            ##
 ##  * dataset                                                                 ##
 ##  * target_variable                                                         ##
 ##  * case (benodigd voor instance level explainations)                       ##
@@ -17,7 +17,7 @@
 ################################################################################
 
 
-if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
+if(!exists('model_fitted') || !exists('train') || !exists('target_variable')){
   stop('not able to make explainer because of missing variables')
   
 } else {
@@ -28,21 +28,19 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
     
     source("./DALEX_functions.R")
   }
-  
-  
   #amount of functions
   function_amount <- 4
 
-  .GlobalEnv$explainer <- tm_explainer(workflow, dataset, target_variable, label)
+  .GlobalEnv$explainer <- gen_explainer(model_fitted, train, target_variable, label = NULL)
   
   list <- vector(mode = "list", length = function_amount)
   plot_list <- vector(mode = "list", length = 0)
   
   plot_counter <- 0 
   
-  ######
+  print('expl created')######
   
-  if(!is.null(case)){
+  if(exists('case')){
     .GlobalEnv$plot_SHAP <- SHAP(case, explainer)
     list <- c(list, 1)
     
@@ -51,12 +49,12 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
   }
   
   
-  ######
+  print('SHAP made')######
   
-  if (!is.null(variables) && !is.null(case)){
+  if (exists('variables') && exists('case')){
     plot_CP <- CP(case, variables, explainer)
     
-    
+    print('here')
     list <- c(list, 2)
   } else{
     warning('variables or/and case not specified')
@@ -64,19 +62,22 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
   }
   
   
-  ######
+  print('CP made')######
+  
   .GlobalEnv$plot_VIP <- VIP(explainer)
   list <- c(list, 3)
   
-  ######
+  print('VIP made')######
+  
   .GlobalEnv$plot_PDP <- PDP(var, explainer)
   list <- c(list, 4)
 
+  print('PDP made')
 #combining plots into one plot
 ################################################################################
   for(plot in list){
     switch (plot,
-      1 = {
+      {
         if(!exists('plot_list')) {
           plot_list <- vector(mode = "list", length = 1)
           plot_list[1] <- plot_SHAP
@@ -85,7 +86,7 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
         }
       },
       
-      2 = {
+      {
         if(!exists('plot_list')) {
           plot_list <- vector(mode = "list", length = 1)
           plot_list[1] <- plot_CP
@@ -94,7 +95,7 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
         }
       },
       
-      3 = {
+      {
         if(!exists('plot_list')) {
           plot_list <- vector(mode = "list", length = 1)
           plot_list[1] <- plot_VIP
@@ -103,7 +104,7 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
         }
       },
       
-      4 = {
+      {
         plot_list <- c(plot_list, plot_PDP)
       }
     )
