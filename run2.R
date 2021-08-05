@@ -36,9 +36,9 @@ target_variable <- 'Risk'
 
 setwd("C:/Users/Hendrik/Documents/Programming/R/GCR-ExpAI/scripts/explainability")
 
-source("DALEX_script.R")
+
 
 # Nieuwe functie!
 ####
 make_vars(model_fitted, GCR_train, 'Risk', label = 'RandomForest')
-
+source("DALEX_script.R")
