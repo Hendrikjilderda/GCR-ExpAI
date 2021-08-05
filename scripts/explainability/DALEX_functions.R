@@ -133,10 +133,10 @@ gen_explainer <- function(model_fitted, train, target_variable, label=NULL){
 
 ################################################################################
 make_vars <- function(model_fitted, data, target_variable, label = NULL){
-  DALEX_model_fitted <- model_fitted
-  DALEX_train <- data
-  DALEX_target_variable <- target_variable
-  label <- label
+  .GlobalEnv$DALEX_model_fitted <- model_fitted
+  .GlobalEnv$DALEX_train <- data
+  .GlobalEnv$DALEX_target_variable <- target_variable
+  .GlobalEnv$label <- label
 }
 
 
