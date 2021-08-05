@@ -88,11 +88,11 @@ calc_PDP <- function(variable, explainer) {
   return(PDP_val)
 }
 
-#PDP <- function(variable, explainer) {
-#  return_PDP <- calc_PDP(variable, explainer)
+PDP <- function(variable, explainer) {
+  return_PDP <- calc_PDP(variable, explainer)
   
-#  plot(pdp_rf) +  ggtitle(sprintf("Partial-dependence profile for %s", variable)) 
-#}
+  plot(pdp_rf) +  ggtitle(sprintf("Partial-dependence profile for %s", variable)) 
+}
 
 ################################################################################
 
