@@ -16,15 +16,24 @@
 ##                                                                            ##
 ################################################################################
 
-#amount of functions
-function_amount <- 4
-
 
 if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
   stop('not able to make explainer because of missing variables')
+  
 } else {
+  
+  if(!exists('tm_explainer') || !exists('SHAP') || 
+     !exists('CP') ||  !exists('VIP') || 
+     !exists('PDP')) {
+    
+    source("./DALEX_functions.R")
+  }
+  
+  
+  #amount of functions
+  function_amount <- 4
 
-  explainer <- tm_explainer(workflow, dataset, target_variable, label)
+  .GlobalEnv$explainer <- tm_explainer(workflow, dataset, target_variable, label)
   
   list <- vector(mode = "list", length = function_amount)
   plot_list <- vector(mode = "list", length = 0)
@@ -34,7 +43,7 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
   ######
   
   if(!is.null(case)){
-    plot_SHAP <- SHAP(case, explainer)
+    .GlobalEnv$plot_SHAP <- SHAP(case, explainer)
     list <- c(list, 1)
     
   } else {
@@ -56,11 +65,11 @@ if(!exists('workflow') || !exists('dataset') || !exists('target_variable')){
   
   
   ######
-  plot_VIP <- VIP(explainer)
+  .GlobalEnv$plot_VIP <- VIP(explainer)
   list <- c(list, 3)
   
   ######
-  plot_PDP <- PDP(var, explainer)
+  .GlobalEnv$plot_PDP <- PDP(var, explainer)
   list <- c(list, 4)
 
 #combining plots into one plot
