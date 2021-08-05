@@ -26,7 +26,7 @@ if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_tar
      !exists('CP') ||  !exists('VIP') || 
      !exists('PDP')) {
     
-    source("./DALEX_functions.R")
+    source("scripts/explainability/DALEX_functions.R")
   }
   #amount of functions
   function_amount <- 4

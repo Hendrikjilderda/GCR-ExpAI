@@ -1,3 +1,5 @@
+source("scripts/load_packages")
+
 GCR <- read.csv('./data/german_credit_data.csv',
                 header = TRUE)
 
