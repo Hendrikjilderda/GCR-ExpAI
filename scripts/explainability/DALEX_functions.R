@@ -137,9 +137,16 @@ make_vars <- function(model_fitted, data, target_variable, label = NULL){
   .GlobalEnv$DALEX_train <- data
   .GlobalEnv$DALEX_target_variable <- target_variable
   .GlobalEnv$label <- label
+  .GlobalEnv$case <- random_case(model_fitted, data, target_variable, 1)
 }
 
-
+random_case <- function(recipe_workflow, dataset, target_variable, rownumber) {
+  new_obs <- 
+    as.data.frame(prep(recipe_workflow$pre$actions$recipe$recipe, dataset) %>%
+    bake(dataset) %>%
+    select(-target_variable))[rownumber,]
+  return(new_obs)
+}
 
 
 

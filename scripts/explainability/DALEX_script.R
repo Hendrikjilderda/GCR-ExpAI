@@ -45,7 +45,7 @@ if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_tar
     list <- c(list, 1)
     print('SHAP made')
   } else {
-    warning('case not specified')
+    warning('not able to make Shapley plot, case not specified')
   }
 
 ######
@@ -55,7 +55,7 @@ if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_tar
     list <- c(list, 2)
     print('CP made')
   } else{
-    warning('variables or/and case not specified')
+    warning('[debug]not able to make certis_paribus profile, variables or/and case not specified')
   
   }
 
@@ -106,5 +106,6 @@ if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_tar
   }
   
   #zou in theorie moeten werken?! werkt niet...
+  #idee is plots naast elkaar weergeven als soort van klein dashbordje
   #gridExtra::grid.arrange(plot_list)
 }
