@@ -50,8 +50,8 @@ if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_tar
 
 ######
   
-  if (exists('variables') && exists('case')){
-    plot_CP <- CP(case, variables, explainer)
+  if (!is.null('CP_var')){
+    plot_CP <- CP(case, CP_var, explainer)
     list <- c(list, 2)
     print('CP made')
   } else{
@@ -65,9 +65,11 @@ if(!exists('DALEX_model_fitted') || !exists('DALEX_train') || !exists('DALEX_tar
   list <- c(list, 3)
   print('VIP made')######
   
-#  .GlobalEnv$plot_PDP <- PDP(var, explainer)  #FIXME
-#  list <- c(list, 4)
-#  print('PDP made')
+  if(!is.null('PDP_var')){
+    .GlobalEnv$plot_PDP <- PDP(PDP_var, explainer)  #FIXME
+    list <- c(list, 4)
+    print('PDP made')
+  }
   
 #combining plots into one plot
 ################################################################################

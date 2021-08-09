@@ -1,3 +1,9 @@
+#eventuele package toevoegingen?
+# https://cran.rstudio.com/web/packages/randomForestExplainer/vignettes/randomForestExplainer.html
+
+
+
+
 
 setwd("C:/Users/Hendrik/Documents/Programming/R/GCR-ExpAI")
 
@@ -20,7 +26,7 @@ final_rf
 
 #explainability
 source("scripts/explainability/DALEX_functions.R")
-make_vars(final_rf_fitted, GCR_train, 'Risk', label = 'RandomForest')
+make_vars(final_rf_fitted, GCR_train, 'Risk', label = 'RandomForest', 'Job')
 source("scripts/explainability/DALEX_script.R")
 
 

@@ -49,7 +49,7 @@ CP <- function(case, variables, explainer) {
   CP_val <- calc_CP(case, explainer)
   
   #plot Ceteris paribus profile
-  plot(CP_val, variables = variables) +
+  plot(CP_val, variables = CP_var) +
     ggtitle("Ceteris-paribus profile", "") + ylim(0, 0.8)
 }
 
@@ -132,12 +132,14 @@ gen_explainer <- function(model_fitted, train, target_variable, label=NULL){
 }
 
 ################################################################################
-make_vars <- function(model_fitted, data, target_variable, label = NULL){
+make_vars <- function(model_fitted, data, target_variable, label = NULL, cp_variables = NULL, pdp_variables = NULL){
   .GlobalEnv$DALEX_model_fitted <- model_fitted
   .GlobalEnv$DALEX_train <- data
   .GlobalEnv$DALEX_target_variable <- target_variable
   .GlobalEnv$label <- label
   .GlobalEnv$case <- random_case(model_fitted, data, target_variable, 1)
+  .GlobalEnv$CP_var <- cp_variables
+  .GlobalEnv$PDP_var <- pdp_variables
 }
 
 random_case <- function(recipe_workflow, dataset, target_variable, rownumber) {
