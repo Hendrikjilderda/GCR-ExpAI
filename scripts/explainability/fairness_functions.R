@@ -1,3 +1,7 @@
+
+# https://modeloriented.github.io/fairmodels/articles/Basic_tutorial.html
+
+
 #setting all the right variables
 make_fairness_vars <- function(model_fitted, 
                       data, target_variable, label = NULL, 
@@ -31,7 +35,7 @@ gen_tidy_explainer <- function(model_fitted,
     DALEXtra::explain_tidymodels(
       model = fairness_model_fitted,
       data = fairness_train,
-      y = custom_y_expl(fairness_model_fitted, fairness_train, fairness_target_variable),
+      y = target_variable,
       label = fairness_label)
   
   return(generated_explainer)
@@ -54,9 +58,10 @@ gen_explainer <- function(model_fitted,
 
 ################################################################################
 
-fairness_check <- function(explainer){
-  fairness_object <- fairness_check(explainer,
-                                    protected = fairness_train$fairness_target_variable)
+fairness_checker <- function(explainer){
+  fairness_object <- fairmodels::fairness_check(explainer,
+
+                                    privileged = 'Male')
   return(fairness_object)
 }
 
