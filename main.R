@@ -16,13 +16,20 @@ source("scripts/load_dataset.R")
 source("scripts/recipes.R")
 
 
-#running different models
+#training and tuning RF
 source("scripts/randomForest.R")
 final_rf
 
+#fairness RF
+source("scripts/explainability/fairness_functions.R")
+make_fairness_vars(final_rf_fitted, GCR_train, 'Risk', label = 'RandomForest', 'Housing', 'Housing')
+source("scripts/explainability/fairness_script.R")
+
+#explainabiliy RF
 source("scripts/explainability/DALEX_functions.R")
 make_vars(final_rf_fitted, GCR_train, 'Risk', label = 'RandomForest', 'Housing', 'Housing')
 source("scripts/explainability/DALEX_script.R")
+
 
 
 
