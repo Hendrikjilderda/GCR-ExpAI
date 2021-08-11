@@ -1,5 +1,5 @@
 rf_model <-
-  rand_forest(mtry = tune(), trees = 500, min_n = tune()) %>%
+  rand_forest(mtry = tune(), trees = 750, min_n = tune()) %>%
   set_engine("randomForest") %>%
   set_mode("classification")
 
@@ -10,7 +10,7 @@ rf_workflow <-
 
 set.seed(234)
 folds <- vfold_cv(GCR_train, v = 5, repeats = 5)
-grid <- expand.grid(mtry = 5:9 , min_n = 3:7 )    # 8 5 beste accuracy
+grid <- expand.grid(mtry = 5 , min_n = 7 )    
 
 doParallel::registerDoParallel()
 tuned_rf <- tune_grid(rf_workflow, 

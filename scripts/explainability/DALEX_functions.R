@@ -12,47 +12,39 @@
 #Shapley Additive Explanations 
 #(https://ema.drwhy.ai/shapley.html)
 
-calc_SHAP <- function(case, explainer) {
-  case_shap <- DALEX::predict_parts(
+
+SHAP <- function(case, explainer) {
+  #calculate shap values
+  SHAP_val <- DALEX::predict_parts(
     explainer = explainer,
     new_observation = case,
     type = "shap"
   )
-  return(case_shap)
+  return(SHAP_val)
 }
-
-
-#deze functie callen voor volledig proces
-SHAP <- function(case, explainer) {
-  #calculate shap values
-  SHAP_val <- calc_SHAP(case, explainer)
-  
-  #plot shap values, show_boxplots = FALSE ook mogelijk
-  plot(SHAP_val) +
-    ggtitle("Shapley Additive Explainations", "")
-}
-
-
 
 #########################
 
 # Ceteris-Paribus Profiles 
 #(https://ema.drwhy.ai/ceterisParibus.html) 
 
-calc_CP <- function(case, explainer) {
-  case_CP <- DALEX::predict_profile(explainer = explainer,
-                                    new_observation = case)
-}
 
 CP <- function(case, variables, explainer) {
   #calculate Ceteris- paribus plots
-  CP_val <- calc_CP(case, explainer)
-  
-  #plot Ceteris paribus profile
-  plot(CP_val, variables = CP_var) +
-    ggtitle("Ceteris-paribus profile", "") + ylim(0, 0.8)
+  CP_val <- ingredients::ceteris_paribus(x = explainer,
+                                         new_observation = case)
+  return(CP_val)
 }
 
+########################
+
+# breakdown plots for interactions
+
+BD <- function(explainer, case){
+  BD_val <- iBreakDown::local_attributions(explainer , case, keep_distributions = TRUE)
+  
+  return(BD_val)
+}
 
 ################################################################################
 
@@ -61,19 +53,12 @@ CP <- function(case, variables, explainer) {
 # Variable Importance Measures 
 # (https://ema.drwhy.ai/featureImportance.html)
 
-calc_VIP <- function(explainer){
-  return_VIP <- DALEX::model_parts(
-    explainer = explainer,
-    loss_function = loss_root_mean_square
-  )
-  return(return_VIP)
-}
-
 VIP <- function(explainer) {
-  .GlobalEnv$VIP_Val <- calc_VIP(explainer)
-  
-  plot(VIP_Val) +
-    ggtitle("Variable Importance Measures", "")
+  VIP_Val <- DALEX::model_parts(
+    explainer = explainer,
+    loss_function = DALEX::loss_root_mean_square
+  )
+  return(VIP_Val)
 }
 
 ########################
@@ -81,17 +66,10 @@ VIP <- function(explainer) {
 # Partial Dependence Profiles 
 # (https://ema.drwhy.ai/partialDependenceProfiles.html)
 
-calc_PDP <- function(variable, explainer) {
-  PDP_val <- DALEX::model_profile(explainer = explainer,
-                                  variables = variable)
-  
-  return(PDP_val)
-}
-
 PDP <- function(variable, explainer) {
-  return_PDP <- calc_PDP(variable, explainer)
-  
-  plot(pdp_rf) +  ggtitle(sprintf("Partial-dependence profile for %s", variable)) 
+  PDP_val <- DALEX::model_profile(explainer = explainer,
+                                     variables = variable)
+  return(PDP_val)
 }
 
 ################################################################################
@@ -131,27 +109,26 @@ gen_explainer <- function(model_fitted, train, target_variable, label=NULL){
   return(generated_explainer)
 }
 
+
+
+gen_explainer2 <- function(model_fitted, train, target_variable, label=NULL){
+  generated_explainer <- explain(
+      model = model_fitted,
+      data = train,
+      y = custom_y_expl(model_fitted, train, target_variable),
+      label = label)
+  
+  return(generated_explainer)
+}
+
+
 ################################################################################
 make_vars <- function(model_fitted, data, target_variable, label = NULL, cp_variables = NULL, pdp_variables = NULL){
   .GlobalEnv$DALEX_model_fitted <- model_fitted
   .GlobalEnv$DALEX_train <- data
   .GlobalEnv$DALEX_target_variable <- target_variable
   .GlobalEnv$label <- label
-  .GlobalEnv$case <- random_case(model_fitted, data, target_variable, 1)
+  .GlobalEnv$case <- data[sample(1:nrow(data),1),]
   .GlobalEnv$CP_var <- cp_variables
   .GlobalEnv$PDP_var <- pdp_variables
 }
-
-random_case <- function(recipe_workflow, dataset, target_variable, rownumber) {
-  new_obs <- 
-    as.data.frame(prep(recipe_workflow$pre$actions$recipe$recipe, dataset) %>%
-    bake(dataset) %>%
-    select(-target_variable))[rownumber,]
-  return(new_obs)
-}
-
-
-
-
-
-
